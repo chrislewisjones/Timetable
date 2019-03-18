@@ -2,16 +2,16 @@ $(document).ready();
 {
   var config = {
     apiKey: "AIzaSyDmQwufQF1FPGeaoAH8-2ySrdBhwm4-jM8",
-    authDomain: "test-d3503.firebaseapp.com",
-    databaseURL: "https://test-d3503.firebaseio.com",
-    projectId: "test-d3503",
-    storageBucket: "test-d3503.appspot.com",
+    authDomain: "train-timetable-3b33e.firebaseapp.com",
+    databaseURL: "https://train-timetable-3b33e.firebaseio.com/",
+    projectId: "train-timetable-3b33e",
+    storageBucket: "train-timetable-3b33e.appspot.com",
     messagingSenderId: "255381909084"
   };
   firebase.initializeApp(config);
 
   var database = firebase.database();
-  // 2. Button for adding Employees
+  // turn on the button for adding a train
   $("#add-train-btn").on("click", function(event) {
     console.log("clicking");
     event.preventDefault();
@@ -109,12 +109,4 @@ $(document).ready();
     //   Append the new row to the table
     $("#train-table > tbody").append(newRow);
   });
-
-  // Example Time Math
-  // -----------------------------------------------------------------------------
-  // Assume Employee start date of January 1, 2015
-  // Assume current date is March 1, 2016
-
-  // We know that this is 15 months.
-  // Now we will create code in moment.js to confirm that any attempt we use meets this test case
 }
