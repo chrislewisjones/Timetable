@@ -1,5 +1,6 @@
 $(document).ready();
 {
+  // firebase hook up to a train-timetable db
   var config = {
     apiKey: "AIzaSyDmQwufQF1FPGeaoAH8-2ySrdBhwm4-jM8",
     authDomain: "train-timetable-3b33e.firebaseapp.com",
@@ -11,12 +12,14 @@ $(document).ready();
   firebase.initializeApp(config);
 
   var database = firebase.database();
+
+  // timesheet and train time activities used heavily
   // turn on the button for adding a train
   $("#add-train-btn").on("click", function(event) {
     console.log("clicking");
     event.preventDefault();
 
-    // Grabs user input
+    // Grabs the user's input from ids in the form
     var trainName = $("#train-name-input")
       .val()
       .trim();
@@ -30,7 +33,7 @@ $(document).ready();
       .val()
       .trim();
 
-    // Creates local "temporary" object for holding employee data
+    // Creates local "temporary" object for holding train data
     var newTrain = {
       trainName: trainName,
       destination: destination,
@@ -38,7 +41,7 @@ $(document).ready();
       frequency: frequency
     };
 
-    // Uploads employee data to the database
+    // Uploads train data to the database
     database.ref().push(newTrain);
 
     // Logs everything to console
@@ -47,16 +50,17 @@ $(document).ready();
     console.log(newTrain.firstTime);
     console.log(newTrain.frequency);
 
+    // alert that the train has been added
     alert("Train successfully added");
 
-    // Clears all of the text-boxes
+    // Clears all of the text-boxes ready for next entry
     $("#train-name-input").val("");
     $("#destination-input").val("");
     $("#first-time-input").val("");
     $("#frequency-input").val("");
   });
 
-  // 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
+  // Create Firebase event for adding the new trains to the database and a row in the html when a user adds an entry
   database.ref().on("child_added", function(childSnapshot) {
     console.log(childSnapshot.val());
 
@@ -77,7 +81,7 @@ $(document).ready();
     var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
     console.log(firstTimeConverted);
 
-    // Current Time
+    // Set the current time using moment
     var currentTime = moment();
     console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
@@ -85,11 +89,11 @@ $(document).ready();
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
     console.log("DIFFERENCE IN TIME: " + diffTime);
 
-    // Time apart (remainder)
+    // Time apart (remainder) used for minutes away
     var tRemainder = diffTime % frequency;
     console.log(tRemainder);
 
-    // Minute Until Train
+    // Minutes until next train
     var tMinutesTillTrain = frequency - tRemainder;
     console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
@@ -102,7 +106,7 @@ $(document).ready();
       $("<td>").text(trainName),
       $("<td>").text(destination),
       $("<td>").text(frequency),
-      $("<td>").text(nextTrain),
+      $("<td>").text(nextTrain.format("hh:mm A")),
       $("<td>").text(tMinutesTillTrain)
     );
 
